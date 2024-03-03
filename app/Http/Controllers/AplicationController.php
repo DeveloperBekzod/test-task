@@ -13,7 +13,8 @@ class AplicationController extends Controller
      */
     public function index()
     {
-        //
+        $applications = Aplication::all();
+        return view('aplications.index', compact('applications'));
     }
 
     /**
@@ -29,7 +30,21 @@ class AplicationController extends Controller
      */
     public function store(StoreAplicationRequest $request)
     {
-        //
+        $request->validated;
+        $requestData = $request->all();
+
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $file_name = time() . '.' . $file->getClientOriginalExtension();
+            if (!file_exists('files/' . auth()->user()->name)) {
+                mkdir('files/' . auth()->user()->name);
+            }
+            $file->move('files/' . auth()->user()->name . '/', $file_name);
+            $requestData['file_url'] = $file_name;
+        }
+        $request->user()->applications()->create($requestData);
+
+        return redirect(route('my-applications'))->with('message', 'Your application send successfully');
     }
 
     /**
@@ -45,7 +60,7 @@ class AplicationController extends Controller
      */
     public function edit(Aplication $aplication)
     {
-        //
+        return view('aplications.edit', compact('aplication'));
     }
 
     /**
@@ -61,6 +76,8 @@ class AplicationController extends Controller
      */
     public function destroy(Aplication $aplication)
     {
-        //
+        $aplication->delete();
+
+        return redirect()->route('my-applications')->with('message', 'Application is deleted !');
     }
 }

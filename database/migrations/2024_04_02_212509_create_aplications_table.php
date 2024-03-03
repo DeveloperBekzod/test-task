@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('aplications', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('subject');
             $table->text('message');
             $table->string('file_url')->nullable();

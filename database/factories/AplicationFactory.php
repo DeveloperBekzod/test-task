@@ -17,7 +17,7 @@ class AplicationFactory extends Factory
      */
     public function definition(): array
     {
-        $id = User::where('role_id', '=', 1)->inRandomOrder()->first()->get();
+        $id = User::where('role_id', '=', 1)->inRandomOrder()->get()->first();
         return [
             'user_id' => $id->id,
             'subject' => $this->faker->sentence(),

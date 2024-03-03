@@ -12,12 +12,15 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('my-applications')" :active="request()->routeIs('my-applications')">
-                        {{ __('My Applications') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('aplications.index')" :active="request()->routeIs('aplications.index')">
-                        {{ __('Applications') }}
-                    </x-nav-link>
+                    @if (auth()->user()->role->name == 'manager')
+                        <x-nav-link :href="route('aplications.index')" :active="request()->routeIs('aplications.index')">
+                            {{ __('Applications') }}
+                        </x-nav-link>
+                    @else
+                        <x-nav-link :href="route('my-applications')" :active="request()->routeIs('my-applications')">
+                            {{ __('My Applications') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 

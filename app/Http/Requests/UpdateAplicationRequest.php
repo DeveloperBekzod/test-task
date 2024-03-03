@@ -11,7 +11,7 @@ class UpdateAplicationRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,9 @@ class UpdateAplicationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'subject' => 'required|string|max:255',
+            'message' => 'required|string',
+            'file' => 'file',
         ];
     }
 }

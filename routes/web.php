@@ -20,12 +20,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/', function () {
+        if (auth()->user()->role->name == 'manager') {
+            return back();
+        }
         return view('form');
     })->name('form');
 
     Route::get('/my-applications', [SiteController::class, 'myAppilations'])->name('my-applications');
 
-    Route::resource('aplications', AplicationController::class);
+    Route::resource('aplications', AplicationController::class)->except(['create', 'show']);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

@@ -13,16 +13,11 @@ class AplicationController extends Controller
      */
     public function index()
     {
+        if (auth()->user()->role->name == 'client') {
+            return back();
+        }
         $applications = Aplication::all();
         return view('aplications.index', compact('applications'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -30,7 +25,7 @@ class AplicationController extends Controller
      */
     public function store(StoreAplicationRequest $request)
     {
-        $request->validated;
+        $request->validated();
         $requestData = $request->all();
 
         if ($request->hasFile('file')) {
@@ -48,18 +43,11 @@ class AplicationController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(Aplication $aplication)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
     public function edit(Aplication $aplication)
     {
+        $this->authorize('update', $aplication);
         return view('aplications.edit', compact('aplication'));
     }
 
@@ -68,7 +56,10 @@ class AplicationController extends Controller
      */
     public function update(UpdateAplicationRequest $request, Aplication $aplication)
     {
-        //
+        $this->authorize('update', $aplication);
+        $request->validated();
+
+        $aplication->user()->applications()->update($request);
     }
 
     /**
@@ -76,6 +67,7 @@ class AplicationController extends Controller
      */
     public function destroy(Aplication $aplication)
     {
+        $this->authorize('delete', $aplication);
         $aplication->delete();
 
         return redirect()->route('my-applications')->with('message', 'Application is deleted !');

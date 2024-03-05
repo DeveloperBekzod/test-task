@@ -19,12 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/', function () {
-        if (auth()->user()->role->name == 'manager') {
-            return back();
-        }
-        return view('form');
-    })->name('form');
+    Route::get('/', [SiteController::class, 'main'])->name('form');
 
     Route::get('/my-applications', [SiteController::class, 'myAppilations'])->name('my-applications');
 

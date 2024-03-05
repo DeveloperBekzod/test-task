@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreAplicationRequest;
 use App\Http\Requests\UpdateAplicationRequest;
 use App\Models\Aplication;
+use Illuminate\Support\Facades\Storage;
 
 class AplicationController extends Controller
 {
@@ -29,13 +30,25 @@ class AplicationController extends Controller
         $requestData = $request->all();
 
         if ($request->hasFile('file')) {
-            $file = $request->file('file');
+
+            /* $file = $request->file('file');
             $file_name = time() . '.' . $file->getClientOriginalExtension();
             if (!file_exists('files/' . auth()->user()->name)) {
                 mkdir('files/' . auth()->user()->name);
             }
             $file->move('files/' . auth()->user()->name . '/', $file_name);
-            $requestData['file_url'] = $file_name;
+            $requestData['file_url'] = $file_name; */
+
+
+            $file = $request->file('file');
+            // $file_name = $file->getClientOriginalName();
+            /* $path = $file->storeAs(
+                auth()->user()->name,
+                $file_name,
+                'public'
+            ); */
+            $path = $file->store('files/' . auth()->user()->name, 'public');
+            $requestData['file_url'] = $path;
         }
         $request->user()->applications()->create($requestData);
 

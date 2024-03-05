@@ -1,5 +1,5 @@
 <div class="relative overflow-x-auto">
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+    <table class="mb-5 w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
                 <th scope="col" class="px-6 py-3">
@@ -48,8 +48,7 @@
                     </td>
                     <td class="px-6 py-4">
                         @if ($application->file_url)
-                            <a href="files/{{ auth()->user()->name }}/{{ $application->file_url }}"
-                                download="files/{{ auth()->user()->name }}/{{ $application->file_url }}"
+                            <a href="{{ asset('storage/' . $application->file_url) }}" download
                                 class="text-nowrap block rounded-md bg-lime-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-lime-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-600">Download
                                 file</a>
                         @else
@@ -85,4 +84,5 @@
             @endforelse
         </tbody>
     </table>
+    {{ $applications->links() }}
 </div>

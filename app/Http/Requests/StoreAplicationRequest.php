@@ -24,7 +24,7 @@ class StoreAplicationRequest extends FormRequest
         return [
             'subject' => 'required|string|max:255',
             'message' => 'required|string',
-            'file' => 'file',
+            'file' => 'file|mimes:png,jpg,pdf,doc,docx,xls,xlsx',
         ];
     }
 }

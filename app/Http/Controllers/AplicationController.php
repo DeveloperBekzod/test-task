@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewApplicationSend;
 use App\Http\Requests\StoreAplicationRequest;
 use App\Http\Requests\UpdateAplicationRequest;
 use App\Models\Aplication;
@@ -50,7 +51,9 @@ class AplicationController extends Controller
             $path = $file->store('files/' . auth()->user()->name, 'public');
             $requestData['file_url'] = $path;
         }
-        $request->user()->applications()->create($requestData);
+        $data = $request->user()->applications()->create($requestData);
+
+        event(new NewApplicationSend($data));
 
         return redirect(route('my-applications'))->with('message', 'Your application send successfully');
     }
@@ -82,6 +85,8 @@ class AplicationController extends Controller
     {
         $this->authorize('delete', $aplication);
         $aplication->delete();
+
+        event(new NewApplicationSend($aplication));
 
         return redirect()->route('my-applications')->with('message', 'Application is deleted !');
     }
